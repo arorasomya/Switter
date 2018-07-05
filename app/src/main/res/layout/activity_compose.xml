@@ -12,20 +12,35 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="129dp"
+        android:layout_marginTop="250dp"
         android:text="Tweet"
-        android:onClick="sendTweet"
+        android:layout_below="@id/textInput"
+        android:onClick="onCompose"
         tools:layout_editor_absoluteX="6dp"
         tools:layout_editor_absoluteY="39dp" />
 
 
-    <EditText
-        android:id="@+id/etTweet"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInput"
         android:layout_width="match_parent"
-        android:layout_height="129dp"
+        android:layout_height="250dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:hint="What's happening?"
-        tools:layout_editor_absoluteX="6dp"
-        tools:layout_editor_absoluteY="0dp" />
+        app:counterEnabled="true"
+        app:counterMaxLength="280"
+        app:errorTextAppearance="@color/red"
+        app:counterTextAppearance="@color/red"
+        app:counterOverflowTextAppearance="@color/red"
+        app:errorEnabled="true">
+
+        <EditText
+            android:id="@+id/etTweet"
+            android:layout_width="334dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:hint="What's happening?"
+            tools:layout_editor_absoluteX="6dp"
+            tools:layout_editor_absoluteY="0dp" />
+    </android.support.design.widget.TextInputLayout>
 </RelativeLayout>

@@ -27,7 +27,7 @@ public class Tweet {
         tweet.uid = jsonObject.getLong("id");
         tweet.createdAt = jsonObject.getString("created_at");
         tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
-//        tweet.relativeDate = tweet.getRelativeTimeAgo(jsonObject.getString(""));
+        tweet.relativeDate = tweet.getRelativeTimeAgo(jsonObject.getString("created_at"));
         return tweet;
 
     }
