@@ -35,7 +35,6 @@ public class TimelineActivity extends AppCompatActivity {
     ArrayList<Tweet> tweets;
     RecyclerView rvTweets;
     public static final int COMPOSE_REQ = 1;
-    public static final int ADD_REQUEST = 20;
     Tweet tweet;
 
 
@@ -49,14 +48,26 @@ public class TimelineActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // called only once and that too right when the page is created
         setContentView(R.layout.activity_timeline);
+        // lookup the swipe container view
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        //setup refresh listener which trggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                fetchTimelineAsync(0);
+            }
+        });
+
         client = TwitterApp.getRestClient(this);
         // find the RecyclerView
         rvTweets = (RecyclerView) findViewById(R.id.rvTweet);
-
         // instantiate the arraylist (data source)
         tweets = new ArrayList<>();
-
         // construct the adapter from this datasource
         tweetAdapter = new TweetAdapter(tweets);
         //RecyclerView setup (layout manager, use adapter)
@@ -64,10 +75,47 @@ public class TimelineActivity extends AppCompatActivity {
         //set the adapter
         rvTweets.setAdapter(tweetAdapter);
         populateTimeline();
-
-
-
     }
+
+    private void fetchTimelineAsync(int page) {
+        // Send the network request to fetch the updated data
+        // `client` here is an instance of Android Async HTTP
+        // getHomeTimeline is an example endpoint.
+        client.getHomeTimeline(new JsonHttpResponseHandler() {
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                // Remember to CLEAR OUT old items before appending in the new ones
+                tweetAdapter.clear();
+                // ...the data has come back, add new items to your adapter...
+                for (int j = 0; j < response.length(); j++) {
+
+                    // convert each object to a tweet model
+
+                    // add that Tweet model to out data source
+                    // notify the adapter that we've added an item
+
+                    try {
+                        Tweet tweet = Tweet.fromJSON(response.getJSONObject(j));
+                        tweets.add(tweet);
+                        tweetAdapter.notifyItemInserted(tweets.size() - 1);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                tweetAdapter.addAll(tweets);
+                // Now we call setRefreshing(false) to signal refresh has finished
+                swipeContainer.setRefreshing(false);
+            }
+
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d("DEBUG", "Fetch timeline error: " + throwable.toString());
+            }
+        });
+    }
+
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // REQUEST_CODE is defined above
