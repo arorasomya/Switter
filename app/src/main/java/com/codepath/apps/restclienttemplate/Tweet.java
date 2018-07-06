@@ -16,7 +16,9 @@ public class Tweet {
     public long uid; // database ID for the tweet
     public User user;
     public String createdAt;
-    public String relativeDate; // date when Tweet was posted
+    public String relativeDate; // date showing time passed when the tweet was posted
+    public String date; // date when posted
+    public String tvHandle; // screen_name
 
     public Tweet() {}
     // deserialize the JSON
@@ -27,7 +29,9 @@ public class Tweet {
         tweet.uid = jsonObject.getLong("id");
         tweet.createdAt = jsonObject.getString("created_at");
         tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
-        tweet.relativeDate = tweet.getRelativeTimeAgo(jsonObject.getString("created_at"));
+        tweet.date = jsonObject.getString("created_at");
+        tweet.relativeDate = tweet.getRelativeTimeAgo(tweet.date);
+        tweet.tvHandle = "@" + tweet.user.screenName;
         return tweet;
 
     }
@@ -36,7 +40,6 @@ public class Tweet {
         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
         SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
         sf.setLenient(true);
-
         String relativeDate = "";
         try {
             long dateMillis = sf.parse(rawJsonDate).getTime();
@@ -45,8 +48,6 @@ public class Tweet {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
         return relativeDate;
     }
-
 }

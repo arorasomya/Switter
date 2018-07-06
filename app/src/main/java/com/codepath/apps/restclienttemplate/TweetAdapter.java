@@ -19,9 +19,11 @@ import org.parceler.Parcels;
 
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> {
-    private List<Tweet> mTweets;
-    Context context;
+    private static List<Tweet> mTweets;
+    static Context context;
     // pass in the Tweets array in the constructor
 
     public TweetAdapter(List<Tweet> tweets) {
@@ -29,18 +31,14 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
     }
 
     // for each row, inflate the layout and cache reference into ViewHolder
-
     @NonNull
     @Override
     public TweetAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-
         View tweetView = inflater.inflate(R.layout.item_tweet, parent, false);
         ViewHolder viewHolder = new ViewHolder(tweetView);
         return viewHolder;
-
-
     }
 
     /* Within the RecyclerView.Adapter class */
@@ -67,7 +65,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         holder.tvUsername.setText(tweet.user.name);
         holder.tvBody.setText(tweet.body);
         holder.tvDate.setText(tweet.relativeDate);
-        Glide.with(context).load(tweet.user.profileImageUrl).into(holder.ivProfileImage);
+        Glide.with(context).load(tweet.user.profileImageUrl)
+                .into(holder.ivProfileImage);
     }
 
     @Override
@@ -78,7 +77,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
     // create ViewHolder class
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView ivProfileImage;
         public TextView tvUsername;
         public TextView tvBody;
@@ -93,13 +92,25 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             tvUsername = (TextView) itemView.findViewById(R.id.tvUserName);
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
             tvDate = (TextView) itemView.findViewById(R.id.tvDate);
+            itemView.setOnClickListener(this);
 
         }
         public void onClick(View view) {
-            // get item position
-//            startActivity(new Intent(TimelineActivity.this, ComposeActivity.class));
+            {
+                // get item position
+                int position = getAdapterPosition();
+                // ensure that the position is valid
+                if (position != RecyclerView.NO_POSITION) {
+                    // get the movie at the position, this won't work if the class is static
+                    Tweet tweet = mTweets.get(position);
+                    // create intent for the new activity
+                    Intent intent = new Intent(context, DetailsActivity.class);
+                    // serialize the movie using the parceler, use its short name as a key
+                    intent.putExtra(Tweet.class.getSimpleName(), Parcels.wrap(tweet));
+                    // show the activity
+                    context.startActivity(intent);
+                }
             }
+        }
     }
-
-
 }
