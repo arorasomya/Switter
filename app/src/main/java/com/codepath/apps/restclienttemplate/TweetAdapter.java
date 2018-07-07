@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> {
     private static List<Tweet> mTweets;
     static Context context;
+
     // pass in the Tweets array in the constructor
 
     public TweetAdapter(List<Tweet> tweets) {
@@ -67,6 +69,14 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         holder.tvDate.setText(tweet.relativeDate);
         Glide.with(context).load(tweet.user.profileImageUrl)
                 .into(holder.ivProfileImage);
+        holder.ivUnlike.setOnClickListener(new View.OnClickListener() {
+
+
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override
@@ -74,14 +84,14 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         return mTweets.size();
     }
 
-
     // create ViewHolder class
-
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView ivProfileImage;
         public TextView tvUsername;
         public TextView tvBody;
+        public ImageView ivUnlike;
         public TextView tvDate;
+        public int current;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -92,25 +102,24 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             tvUsername = (TextView) itemView.findViewById(R.id.tvUserName);
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
             tvDate = (TextView) itemView.findViewById(R.id.tvDate);
+            ivUnlike = (ImageView) itemView.findViewById(R.id.ivUnlike);
             itemView.setOnClickListener(this);
-
         }
+
         public void onClick(View view) {
-            {
-                // get item position
-                int position = getAdapterPosition();
-                // ensure that the position is valid
-                if (position != RecyclerView.NO_POSITION) {
-                    // get the movie at the position, this won't work if the class is static
-                    Tweet tweet = mTweets.get(position);
-                    // create intent for the new activity
-                    Intent intent = new Intent(context, DetailsActivity.class);
-                    // serialize the movie using the parceler, use its short name as a key
-                    intent.putExtra(Tweet.class.getSimpleName(), Parcels.wrap(tweet));
-                    // show the activity
-                    context.startActivity(intent);
-                }
-            }
+                    // get item position
+                    int position = getAdapterPosition();
+                    // ensure that the position is valid
+                    if (position != RecyclerView.NO_POSITION) {
+                        // get the movie at the position, this won't work if the class is static
+                        Tweet tweet = mTweets.get(position);
+                        // create intent for the new activity
+                        Intent intent = new Intent(context, DetailsActivity.class);
+                        // serialize the movie using the parceler, use its short name as a key
+                        intent.putExtra(Tweet.class.getSimpleName(), Parcels.wrap(tweet));
+                        // show the activity
+                        context.startActivity(intent);
+                    }
         }
     }
 }

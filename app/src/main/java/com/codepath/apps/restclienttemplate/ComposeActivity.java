@@ -29,8 +29,6 @@ public class ComposeActivity extends AppCompatActivity {
 
 
     TwitterClient client;
-    JsonHttpResponseHandler handler;
-    Tweet tweet;
     Button button;
     EditText addTweet;
     String newTweet;
@@ -44,7 +42,6 @@ public class ComposeActivity extends AppCompatActivity {
         button = (Button) findViewById(R.id.addTweet);
 //        onCompose(findViewById(android.R.id.content));
         changeColor();
-
     }
 
     public void onCompose(View view) {
@@ -81,7 +78,6 @@ public class ComposeActivity extends AppCompatActivity {
             addTweet.setTextColor(Color.parseColor("#990000"));
         }
     }
-
 
 //    public void onSuccess(int statusCode, Header[] headers, JSONObject response) throws JSONException {
 //        Tweet tweet = new Tweet();
