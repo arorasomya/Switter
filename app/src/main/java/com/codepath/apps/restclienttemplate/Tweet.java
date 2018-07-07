@@ -33,7 +33,6 @@ public class Tweet {
         tweet.relativeDate = tweet.getRelativeTimeAgo(tweet.date);
         tweet.tvHandle = "@" + tweet.user.screenName;
         return tweet;
-
     }
     // getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");
     public String getRelativeTimeAgo(String rawJsonDate) {

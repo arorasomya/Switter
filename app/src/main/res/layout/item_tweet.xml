@@ -41,7 +41,7 @@
         android:layout_alignParentTop="true"
         android:text="TextView" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/ivUnlike"
         android:layout_width="36dp"
         android:layout_height="23dp"
@@ -52,7 +52,8 @@
         android:layout_marginTop="5dp"
         android:paddingBottom="2dp"
         android:paddingTop="0dp"
-        app:srcCompat="@drawable/unlike" />
+        app:srcCompat="@drawable/unlike"
+        android:background="@android:color/white" />
 
 
 </RelativeLayout>

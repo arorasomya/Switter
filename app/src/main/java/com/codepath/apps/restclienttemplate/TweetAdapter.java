@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Movie;
 import android.media.Image;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,6 +27,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> {
     private static List<Tweet> mTweets;
     static Context context;
+
 
     // pass in the Tweets array in the constructor
 
@@ -69,14 +72,6 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         holder.tvDate.setText(tweet.relativeDate);
         Glide.with(context).load(tweet.user.profileImageUrl)
                 .into(holder.ivProfileImage);
-        holder.ivUnlike.setOnClickListener(new View.OnClickListener() {
-
-
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
     }
 
     @Override
@@ -121,5 +116,10 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                         context.startActivity(intent);
                     }
         }
+    }
+    public void like(View view) {
+
+        ImageButton ivUnlike = (ImageButton) view.findViewById(R.id.ivUnlike);
+        ivUnlike.setImageResource(R.drawable.like);
     }
 }
